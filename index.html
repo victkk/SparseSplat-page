@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="SparseSplat: Towards Applicable Feed-Forward 3D Gaussian Splatting with Pixel-Unaligned Prediction">
+  <meta name="description" content="SparseSplat is the first feed-forward 3DGS model that adaptively adjusts Gaussian density using entropy-based sampling, achieving SOTA quality with only 22% of the Gaussians.">
+  <meta name="keywords" content="3D Gaussian Splatting, feed-forward, novel view synthesis, sparse reconstruction, SLAM, AR/VR, computer vision, CVPR">
+  <meta name="author" content="Zicheng Zhang, Xiangting Meng, Ke Wu, Wenchao Ding">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Fudan University / ShanghaiTech University">
+  <meta property="og:title" content="SparseSplat: Towards Applicable Feed-Forward 3D Gaussian Splatting">
+  <meta property="og:description" content="SparseSplat is the first feed-forward 3DGS model that adaptively adjusts Gaussian density using entropy-based sampling, achieving SOTA quality with only 22% of the Gaussians.">
+  <meta property="og:url" content="https://victkk.github.io/SparseSplat/">
+  <meta property="og:image" content="https://victkk.github.io/SparseSplat/static/images/cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SparseSplat - Research Preview">
+  <meta property="article:published_time" content="2026-03-03T00:00:00.000Z">
+  <meta property="article:author" content="Zicheng Zhang">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="3D Gaussian Splatting">
+  <meta property="article:tag" content="Novel View Synthesis">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SparseSplat: Applicable Feed-Forward 3D Gaussian Splatting">
+  <meta name="twitter:description" content="SparseSplat achieves SOTA rendering quality with only 22% of Gaussians via entropy-based adaptive sampling.">
+  <meta name="twitter:image" content="https://victkk.github.io/SparseSplat/static/images/cover.png">
+  <meta name="twitter:image:alt" content="SparseSplat - Research Preview">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="SparseSplat: Towards Applicable Feed-Forward 3D Gaussian Splatting with Pixel-Unaligned Prediction">
+  <meta name="citation_author" content="Zhang, Zicheng">
+  <meta name="citation_author" content="Meng, Xiangting">
+  <meta name="citation_author" content="Wu, Ke">
+  <meta name="citation_author" content="Ding, Wenchao">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="CVPR 2026">
+  <meta name="citation_pdf_url" content="https://victkk.github.io/SparseSplat/static/pdfs/paper.pdf">
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>SparseSplat | CVPR 2026</title>
+  
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+  
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  
+  <!-- Non-critical CSS -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "SparseSplat: Towards Applicable Feed-Forward 3D Gaussian Splatting with Pixel-Unaligned Prediction",
+    "description": "SparseSplat is the first feed-forward 3DGS model that adaptively adjusts Gaussian density according to scene structure and information richness, yielding highly compact 3DGS maps.",
+    "author": [
+      {"@type": "Person", "name": "Zicheng Zhang", "affiliation": {"@type": "Organization", "name": "Fudan University"}},
+      {"@type": "Person", "name": "Xiangting Meng", "affiliation": {"@type": "Organization", "name": "ShanghaiTech University"}},
+      {"@type": "Person", "name": "Ke Wu", "affiliation": {"@type": "Organization", "name": "Fudan University"}},
+      {"@type": "Person", "name": "Wenchao Ding", "affiliation": {"@type": "Organization", "name": "ShanghaiTech University"}}
+    ],
+    "datePublished": "2026-03-03",
+    "publisher": {"@type": "Organization", "name": "CVPR 2026"},
+    "url": "https://victkk.github.io/SparseSplat/",
+    "keywords": ["3D Gaussian Splatting", "Novel View Synthesis", "Feed-Forward Reconstruction", "SLAM", "AR/VR"],
+    "abstract": "Recent progress in feed-forward 3D Gaussian Splatting (3DGS) has notably improved rendering quality. However, the spatially uniform and highly redundant 3DGS map generated by previous feed-forward 3DGS methods limits their integration into downstream reconstruction tasks. We propose SparseSplat, the first feed-forward 3DGS model that adaptively adjusts Gaussian density according to scene structure and information richness of local regions, yielding highly compact 3DGS maps.",
+    "isAccessibleForFree": true
+  }
+  </script>
+
+  <style>
+    .teaser-image {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .results-table {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    .results-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    .results-table th {
+      background: #2563eb;
+      color: white;
+      padding: 10px 14px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .results-table td {
+      padding: 8px 14px;
+      text-align: center;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .results-table tr:hover td { background: #f0f4ff; }
+    .results-table tr.ours td { background: #eff6ff; font-weight: 600; }
+    .results-table tr.ours-best td { background: #dbeafe; font-weight: 700; }
+    .results-table .method-group-header td {
+      background: #f3f4f6;
+      font-style: italic;
+      color: #6b7280;
+      font-size: 0.85rem;
+    }
+    .highlight { color: #2563eb; font-weight: 700; }
+    .contribution-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .contribution-box h4 {
+      font-weight: 700;
+      color: #1d4ed8;
+      margin-bottom: 0.3rem;
+    }
+    .section-figure {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .section-figure img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .section-figure figcaption {
+      margin-top: 0.75rem;
+      color: #6b7280;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+    .badge {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .badge.green { background: #059669; }
+    .badge.orange { background: #d97706; }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <!-- ===== HERO / TITLE ===== -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">SparseSplat: Towards Applicable Feed-Forward 3D Gaussian Splatting with Pixel-Unaligned Prediction</h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Zicheng Zhang<sup>1</sup>,</span>
+              <span class="author-block">Xiangting Meng<sup>2</sup>,</span>
+              <span class="author-block">Ke Wu<sup>1</sup>,</span>
+              <span class="author-block">Wenchao Ding<sup>2</sup></span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Fudan University &nbsp;&nbsp; <sup>2</sup>ShanghaiTech University</span>
+            </div>
+            <div class="is-size-6 publication-authors" style="margin-top:0.5rem;">
+              <span class="author-block" style="color:#e74c3c; font-weight:600;">CVPR 2026</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Paper -->
+                <span class="link-block">
+                  <a href="static/pdfs/paper.pdf" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <!-- GitHub Code (placeholder) -->
+                <span class="link-block">
+                  <a href="https://github.com/victkk/SparseSplat" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- arXiv (placeholder) -->
+                <span class="link-block">
+                  <a href="#" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv (coming soon)</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEASER IMAGE ===== -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <figure class="section-figure" style="margin:0;">
+          <img class="teaser-image" src="static/images/cover.png"
+               alt="SparseSplat teaser: Efficiency vs. Quality comparison showing fewer Gaussians with better performance"/>
+          <figcaption style="margin-top:1rem; font-size:0.95rem; color:#374151;">
+            <strong>SparseSplat</strong> achieves state-of-the-art rendering quality on DL3DV using significantly fewer Gaussians than the previous SOTA, DepthSplat (<strong>150k vs. 688k</strong>). Our model also generates competitive results in sparse settings (e.g., 10k). As illustrated by ellipsoid renderings, SparseSplat adaptively allocates Gaussian density based on scene content — contrasting with pixel-aligned methods that produce spatially uniform and highly redundant primitives even in textureless regions.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABSTRACT ===== -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Recent progress in feed-forward 3D Gaussian Splatting (3DGS) has notably improved rendering quality. However, the spatially uniform and highly redundant 3DGS map generated by previous feed-forward 3DGS methods limits their integration into downstream reconstruction tasks. We propose <strong>SparseSplat</strong>, the first feed-forward 3DGS model that adaptively adjusts Gaussian density according to scene structure and information richness of local regions, yielding highly compact 3DGS maps.
+            </p>
+            <p>
+              To achieve this, we propose <strong>entropy-based probabilistic sampling</strong>, generating large, sparse Gaussians in textureless areas and assigning small, dense Gaussians to regions with rich information. Additionally, we designed a specialized <strong>3D-Local Attribute Predictor</strong> that efficiently encodes local context and decodes it into 3DGS attributes, addressing the receptive field mismatch between the general 3DGS optimization pipeline and feed-forward models. Extensive experimental results demonstrate that SparseSplat can achieve state-of-the-art rendering quality with only <strong>22% of the Gaussians</strong> and maintain reasonable rendering quality with only <strong>1.5% of the Gaussians</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== KEY CONTRIBUTIONS ===== -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Key Contributions</h2>
+      <div class="content">
+        <div class="contribution-box">
+          <h4>🔍 Two Fundamental Design Flaws Identified</h4>
+          <p>We are the first to identify and analyze two fundamental design flaws in existing feed-forward 3DGS: the <em>distribution mismatch</em> (rigid structure vs. content-aware distribution) and the <em>receptive field mismatch</em> (global context vs. local optimization).</p>
+        </div>
+        <div class="contribution-box">
+          <h4>📊 Adaptive Primitive Sampling</h4>
+          <p>A novel entropy-based strategy that discards the "pixel-aligned" paradigm to generate a sparse, content-aware set of 3DGS anchors. The temperature parameter <em>τ</em> provides intuitive control over the quality-memory trade-off, enabling diverse downstream applications from AR/VR to 3DGS-SLAM.</p>
+        </div>
+        <div class="contribution-box">
+          <h4>🧠 3D-Local Attribute Predictor</h4>
+          <p>A lightweight predictor leveraging 3D K-Nearest-Neighbors, aligning the network's design with the local nature of 3DGS optimization. Instead of regressing from a single pixel's feature, it aggregates neighborhood information in 3D space for each sparse anchor point.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PIPELINE ===== -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Method Overview</h2>
+      <div class="content has-text-justified">
+        <figure class="section-figure">
+          <img src="static/images/pipeline.png"
+               alt="SparseSplat pipeline: Feature & Depth Extraction, Adaptive Primitive Sampling, and 3D-Local Attribute Prediction"/>
+          <figcaption>
+            <strong>Overall Pipeline of SparseSplat.</strong> Our method begins with a frozen backbone to generate feature and depth maps from multi-view posed images. The Adaptive Primitive Sampling stage computes entropy maps, transforms them into probability maps, and samples sparse 2D pixels — which are then back-projected into 3D Sparse Anchor Points. Finally, for each anchor point, we gather its local KNN neighborhood and feed it into a lightweight prediction head to predict complete Gaussian attributes (α, s, q, c).
+          </figcaption>
+        </figure>
+
+        <figure class="section-figure" style="margin-top: 2rem;">
+          <img src="static/images/splat_description.png" style="max-width: 600px;"
+               alt="Locality of 3DGS optimization illustration"/>
+          <figcaption>
+            <strong>Locality of Classic 3DGS Optimization.</strong> During backpropagation, gradients propagate through only nearby pixels, confirming that Gaussian attributes are determined by local neighborhoods — motivating our 3D-Local Attribute Predictor design.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RESULTS ===== -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Experimental Results</h2>
+
+      <h3 class="title is-4">Quantitative Results on DL3DV</h3>
+      <p class="has-text-justified" style="margin-bottom:1rem;">
+        SparseSplat is evaluated at various operating points by adjusting the temperature parameter <em>τ</em>, resulting in different Gaussian counts (150k, 100k, 40k, 10k). Our method achieves <span class="highlight">state-of-the-art rendering quality</span> at 150k Gaussians (PSNR 24.20 vs DepthSplat's 24.17) while using only <span class="highlight">22% of the primitives</span>.
+      </p>
+
+      <div class="results-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Category</th>
+              <th>PSNR ↑</th>
+              <th>SSIM ↑</th>
+              <th>LPIPS ↓</th>
+              <th>GS Count ↓</th>
+              <th>Time (s) ↓</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="method-group-header">
+              <td colspan="7">Pixel-Aligned Methods</td>
+            </tr>
+            <tr>
+              <td>MVSplat</td>
+              <td><span class="badge orange">pixel-aligned</span></td>
+              <td>22.95</td><td>0.774</td><td>0.192</td><td>688k</td><td>0.260</td>
+            </tr>
+            <tr>
+              <td>DepthSplat</td>
+              <td><span class="badge orange">pixel-aligned</span></td>
+              <td>24.17</td><td>0.816</td><td>0.152</td><td>688k</td><td>0.128</td>
+            </tr>
+            <tr class="method-group-header">
+              <td colspan="7">Post-Processing Methods</td>
+            </tr>
+            <tr>
+              <td>GGN</td>
+              <td><span class="badge">postprocess</span></td>
+              <td>20.23</td><td>0.570</td><td>0.268</td><td>162k</td><td>0.320</td>
+            </tr>
+            <tr>
+              <td>Long-LRM</td>
+              <td><span class="badge">postprocess</span></td>
+              <td>20.92</td><td>0.627</td><td>0.265</td><td>200k</td><td>0.115</td>
+            </tr>
+            <tr class="method-group-header">
+              <td colspan="7">Voxelization Methods</td>
+            </tr>
+            <tr>
+              <td>AnySplat</td>
+              <td><span class="badge">voxelization</span></td>
+              <td>17.45</td><td>0.471</td><td>0.320</td><td>608k</td><td>0.378</td>
+            </tr>
+            <tr>
+              <td></td><td></td>
+              <td>17.34</td><td>0.463</td><td>0.330</td><td>528k</td><td>0.384</td>
+            </tr>
+            <tr>
+              <td></td><td></td>
+              <td>16.14</td><td>0.417</td><td>0.390</td><td>393k</td><td>0.415</td>
+            </tr>
+            <tr>
+              <td></td><td></td>
+              <td>12.22</td><td>0.309</td><td>0.519</td><td>222k</td><td>0.441</td>
+            </tr>
+            <tr>
+              <td></td><td></td>
+              <td>8.91</td><td>0.239</td><td>0.618</td><td>113k</td><td>0.473</td>
+            </tr>
+            <tr class="method-group-header">
+              <td colspan="7">Ours – SparseSplat (Adaptive)</td>
+            </tr>
+            <tr class="ours-best">
+              <td><strong>SparseSplat (150k)</strong></td>
+              <td><span class="badge green">adaptive</span></td>
+              <td><strong>24.20</strong></td><td><strong>0.817</strong></td><td>0.168</td><td><strong>150k</strong></td><td>0.398</td>
+            </tr>
+            <tr class="ours">
+              <td>SparseSplat (100k)</td>
+              <td><span class="badge green">adaptive</span></td>
+              <td>23.95</td><td>0.786</td><td>0.189</td><td>100k</td><td>0.192</td>
+            </tr>
+            <tr class="ours">
+              <td>SparseSplat (40k)</td>
+              <td><span class="badge green">adaptive</span></td>
+              <td>22.65</td><td>0.737</td><td>0.251</td><td>40k</td><td><strong>0.111</strong></td>
+            </tr>
+            <tr class="ours">
+              <td>SparseSplat (10k)</td>
+              <td><span class="badge green">adaptive</span></td>
+              <td>21.29</td><td>0.665</td><td>0.321</td><td>10k</td><td><strong>0.105</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.85rem; color:#6b7280; margin-top:0.5rem;">
+        Quantitative comparison on the DL3DV dataset. GS Cnt = average number of Gaussian primitives across scenes.
+      </p>
+
+      <!-- Visual Comparison -->
+      <h3 class="title is-4" style="margin-top:2.5rem;">Visual Comparison on DL3DV</h3>
+      <figure class="section-figure">
+        <img src="static/images/comparison_5.png"
+             alt="Rendering quality comparisons on DL3DV between SparseSplat and baselines"/>
+        <figcaption>
+          <strong>Rendering quality comparisons on DL3DV.</strong> Our model matches the SOTA rendering quality of DepthSplat with only 150k Gaussians (vs. 688k). Under sparse settings (40k and 10k), our method maintains structural integrity with minor progressive blurring.
+        </figcaption>
+      </figure>
+
+      <!-- PSNR vs Gaussian Count -->
+      <h3 class="title is-4" style="margin-top:2.5rem;">Efficiency vs. Quality Trade-off</h3>
+      <figure class="section-figure">
+        <img src="static/images/rendering_fps_vs_gaussian_cnt.png" style="max-width:640px;"
+             alt="PSNR vs Gaussian Count plot comparing SparseSplat with baselines"/>
+        <figcaption>
+          SparseSplat achieves superior PSNR at every Gaussian budget compared to baselines. Unlike AnySplat which degrades severely at lower counts, SparseSplat maintains robust quality even at extreme sparsity (10k Gaussians, ≈1.5% of DepthSplat).
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== APPLICATIONS ===== -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Downstream Applications</h2>
+      <div class="columns">
+        <div class="column">
+          <div class="card" style="border-radius:12px; height:100%; padding:1.5rem;">
+            <h4 class="title is-5">🥽 AR/VR</h4>
+            <p>The <strong>150k model</strong> (398ms) is suited for AR/VR, where a higher one-time reconstruction cost is acceptable to gain a highly compact model ideal for efficient on-device storage and real-time rendering.</p>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card" style="border-radius:12px; height:100%; padding:1.5rem;">
+            <h4 class="title is-5">🗺️ 3DGS-SLAM</h4>
+            <p>The <strong>10k/40k models</strong> (105ms/111ms) are ideal for real-time SLAM — faster than DepthSplat (128ms) while maintaining robust quality. SparseSplat makes feed-forward 3DGS practical for sequential scene reconstruction.</p>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card" style="border-radius:12px; height:100%; padding:1.5rem;">
+            <h4 class="title is-5">🤖 Robotics &amp; Edge</h4>
+            <p>With a <strong>flexible τ parameter</strong>, users can select any operating point on the quality-speed-memory spectrum — critical for resource-constrained edge platforms such as cars, drones, or AR glasses.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PAPER PDF ===== -->
+  <section class="section hero is-small">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Paper</h2>
+      <iframe src="static/pdfs/paper.pdf" width="100%" height="600" style="border-radius:8px; border:1px solid #e5e7eb;"></iframe>
+    </div>
+  </section>
+
+  <!-- ===== BIBTEX ===== -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@inproceedings{zhang2026sparssplat,
+  title={SparseSplat: Towards Applicable Feed-Forward 3D Gaussian Splatting with Pixel-Unaligned Prediction},
+  author={Zhang, Zicheng and Meng, Xiangting and Wu, Ke and Ding, Wenchao},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2026}
+}</code></pre>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.
+              This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </main>
+</body>
+</html>
