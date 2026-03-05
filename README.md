@@ -1,6 +1,6 @@
 # SparseSplat: Towards Applicable Feed-Forward 3D Gaussian Splatting with Pixel-Unaligned Prediction
 
-### [Project Page](https://victkk.github.io/SparseSplat-page/) | [Paper (PDF)](https://victkk.github.io/SparseSplat-page/static/pdfs/paper.pdf) | [Code](https://github.com/victkk/SparseSplat)
+### [Project Page](https://victkk.github.io/SparseSplat-page/) | [Paper (PDF)](https://victkk.github.io/SparseSplat-page/static/pdfs/paper.pdf) | [Code(Coming Soon)]
 
 **CVPR 2026**
 
