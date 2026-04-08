@@ -1,6 +1,6 @@
 # SparseSplat: Towards Applicable Feed-Forward 3D Gaussian Splatting with Pixel-Unaligned Prediction
 
-### [Project Page](https://victkk.github.io/SparseSplat-page/) | [Paper (PDF)](https://victkk.github.io/SparseSplat-page/static/pdfs/paper.pdf) | [Code(Coming Soon)]
+### [Project Page](https://victkk.github.io/SparseSplat-page/) | [Paper (PDF)](https://victkk.github.io/SparseSplat-page/static/pdfs/paper.pdf) | [Code (Coming Soon)](code/README.md)
 
 **CVPR 2026**
 
@@ -31,6 +31,12 @@ Extensive experimental results demonstrate that SparseSplat can achieve state-of
 | SparseSplat (Ours, 10k) | 21.29 | 0.665 | 0.321 | 10k |
 
 SparseSplat matches SOTA rendering quality (DepthSplat) using only **22%** of the Gaussians, and remains faster than DepthSplat at the 10k and 40k settings — ideal for real-time SLAM and edge applications.
+
+---
+
+## Code
+
+The training and inference code will be released here soon. The `code/` directory is reserved as a placeholder for the upcoming release.
 
 ---
 
